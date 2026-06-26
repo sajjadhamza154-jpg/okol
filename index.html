@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OKOL | Premium Cyber Tech Store</title>
+    <style>
+        :root {
+            --primary: #ff0055;
+            --primary-glow: rgba(255, 0, 85, 0.4);
+            --accent: #00d4aa;
+            /* Updated to Light Blue & Premium Gray Tones */
+            --dark-bg: #e4e9f0; 
+            --card-bg: #f8fafc;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --header-bg: rgba(228, 233, 240, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Cinematic Preloader System */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #111827; /* Keeps dark for dramatic contrast during first open */
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .loader-logo {
+            font-size: 55px;
+            font-weight: 900;
+            letter-spacing: 8px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px var(--primary-glow);
+            margin-bottom: 30px;
+            transition: all 0.5s ease;
+        }
+        .loader-logo span { color: var(--primary); }
+
+        .loader-tagline {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--accent);
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.3);
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .cyber-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 0, 85, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            border-bottom-color: var(--accent);
+            animation: spin 1s cubic-bezier(0.6, 0.2, 0.2, 0.8) infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Premium Cyber Header */
+        header {
+            background: var(--header-bg);
+            backdrop-filter: blur(20px);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 5px;
+            color: var(--text-main);
+            text-transform: uppercase;
+            text-shadow: 0 0 5px rgba(0,0,0,0.1);
+            text-decoration: none;
+        }
+        .logo span { color: var(--primary); }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .cart-icon-btn, .auth-btn {
+            background: linear-gradient(135deg, var(--primary), #bc003f);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            transition: all 0.3s ease;
+        }
+        .cart-icon-btn:hover, .auth-btn:hover {
+            transform: scale(1.05);
+        }
+        .auth-btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--primary);
+            box-shadow: none;
+        }
+        .auth-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Smooth Cinematic Hero Slider */
+        .hero {
+            height: 50vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1.2s ease-in-out;
+            background-image: url('https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1200&q=80');
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(228, 233, 240, 0.3), var(--dark-bg));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 900px;
+        }
+
+        .hero h1 { 
+            font-size: 55px; 
+            font-weight: 900; 
+            margin-bottom: 20px; 
+            letter-spacing: 2px;
+            color: #1e293b;
+        }
+        .hero p { font-size: 22px; color: var(--primary); font-weight: 700; letter-spacing: 1px;}
+
+        /* Neon Ticker Line */
+        .ticker-wrap {
+            background: #1e293b;
+            overflow: hidden;
+            padding: 14px 0;
+        }
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marquee 22s linear infinite;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: #fff;
+        }
+        .ticker span { padding: 0 50px; }
+
+        /* Catalog Layout */
+        .container {
+            max-width: 1440px;
+            margin: 40px auto;
+            padding: 0 30px;
+        }
+
+        /* Brand Showcase Page Section */
+        .brand-story-section {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+        .brand-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 25px;
+        }
+        @media(max-width: 768px) { .brand-grid { grid-template-columns: 1fr; } }
+        
+        .brand-box h3 {
+            font-size: 22px;
+            color: #0f172a;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand-box p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        .category-title {
+            font-size: 26px;
+            margin: 60px 0 30px 0;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #0f172a;
+        }
+        .category-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 2px;
+            background: linear-gradient(to right, var(--primary), transparent);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        /* Futuristic Light Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 20px 40px rgba(255, 0, 85, 0.1);
+        }
+
+        .img-container {
+            position: relative;
+            overflow: hidden;
+            height: 280px;
+            background: #f1f5f9;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .card-mini-ad {
+            background: rgba(255, 0, 85, 0.08);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 8px;
+            text-align: center;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card-info { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card-title { font-size: 18px; margin-bottom: 12px; font-weight: 700; color: #0f172a; line-height: 1.4; }
+        .card-price { font-size: 24px; color: var(--primary); font-weight: 800; margin-bottom: 20px; }
+
+        .btn-add-cart {
+            width: 100%;
+            padding: 15px;
+            background: transparent;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-main);
+            font-weight: 700;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        .btn-add-cart:hover { 
+            background: var(--text-main); 
+            color: #fff;
+            border-color: var(--text-main);
+        }
+
+        /* Cart Slide Panel */
+        .cart-sidebar {
+            position: fixed;
+            top: 0; right: -440px;
+            width: 420px; height: 100%;
+            background: #ffffff;
+            box-shadow: -15px 0 40px rgba(0,0,0,0.1);
+            z-index: 2000;
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid rgba(0,0,0,0.05);
+            color: #1e293b;
+        }
+
+        .cart-sidebar.active { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
+        .close-cart { font-size: 35px; cursor: pointer; color: var(--primary); }
+        .cart-items-list { flex-grow: 1; overflow-y: auto; margin-bottom: 30px; }
+        .cart-item { display: flex; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 15px; }
+        
+        .btn-checkout {
+            background: #25D366;
+            color: white;
+            padding: 18px;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 16px;
+            font-weight: bold;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Auth Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(10px);
+            z-index: 3000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .auth-modal {
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            border-radius: 24px;
+            position: relative;
+            text-align: center;
+            transform: scale(0.9);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            color: #1e293b;
+        }
+        .modal-overlay.active .auth-modal {
+            transform: scale(1);
+        }
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 25px;
+            font-size: 30px;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+        .close-modal:hover { color: var(--primary); }
+        .auth-form input {
+            width: 100%;
+            padding: 15px 20px;
+            background: #f1f5f9;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
+            color: #000;
+            font-size: 15px;
+            margin-bottom: 15px;
+            outline: none;
+        }
+        .auth-submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), #bc003f);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px var(--primary-glow);
+            margin-top: 10px;
+        }
+        .auth-switch span {
+            color: var(--accent);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Bottom Floating Toast Notification */
+        .bottom-ad {
+            position: fixed;
+            bottom: -150px; left: 30px;
+            background: #ffffff;
+            border: 1px solid var(--accent);
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 999;
+            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+            max-width: 380px;
+            color: #1e293b;
+        }
+        .bottom-ad.show { bottom: 30px; }
+        .bottom-ad img { width: 60px; height: 60px; object-fit: cover; border-radius: 10px; }
+
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-logo" id="loaderLogo">OK<span>OL</span></div>
+        <div class="loader-tagline" id="loaderTagline">Pakistan's No.1 Mobile Accessories Brand</div>
+        <div class="cyber-spinner"></div>
+    </div>
+
+    <header>
+        <a href="#" class="logo">OK<span>OL</span></a>
+        <div class="header-actions">
+            <button class="auth-btn" id="navAuthBtn" onclick="openAuthModal('login')">Login</button>
+            <button class="cart-icon-btn" onclick="toggleCart()">🛒 BAG (<span id="cart-count">0</span>)</button>
+        </div>
+    </header>
+
+    <div class="ticker-wrap">
+        <div class="ticker">
+            <span>⚡ OVERPOWERED SOUND: OKOL Cyber Pods Series is now available!</span>
+            <span>🔋 HEAVY POWER: 20000mAh Ultra-Fast PD Blocks back in stock!</span>
+            <span>🚀 LAUNCH PROMO: Get Free Delivery all over Pakistan this weekend!</span>
+        </div>
+    </div>
+
+    <section class="hero" id="hero-slider">
+        <div class="hero-content">
+            <h1>NEXT-GEN TECH GEAR</h1>
+            <p>Premium Audio & Ultimate Power Ecosystem</p>
+        </div>
+    </section>
+
+    <div class="container">
+        
+        <div class="brand-story-section">
+            <h2 style="font-size: 28px; font-weight: 800; text-transform: uppercase; color: #0f172a; border-bottom: 2px solid var(--primary); padding-bottom: 10px; display: inline-block;">
+                Meet Our Brand
+            </h2>
+            <div class="brand-grid">
+                <div class="brand-box">
+                    <h3>👑 The Vision of Hamza Bhai</h3>
+                    <p>
+                        OKOL was envisioned and built by <strong>Hamza Bhai</strong> with a singular, clear objective: to bring high-end, premium cyberpunk-inspired smart tech to Pakistan's community at non-premium prices. Every audio piece, charging block, and dynamic cable listed here passes through Hamza Bhai’s personal testing loop before getting into production.
+                    </p>
+                </div>
+                <div class="brand-box">
+                    <h3>🛡️ Why We Trust On OKOL?</h3>
+                    <p>
+                        We understand mobile gear is part of your daily hustle. That's why OKOL premium accessories are engineered with elite military-grade chipsets, heavy-duty battery blocks, and true High-Res audio drivers. With seamless instant checkout parameters, secure tracking, and a direct line to our support network, you aren’t just purchasing items—you are acquiring absolute premium security.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="category-title">Wireless Audio Series</div>
+        <div class="products-grid" id="audio-grid"></div>
+
+        <div class="category-title">Charging & Power Stations</div>
+        <div class="products-grid" id="power-grid"></div>
+
+        <div class="category-title">Premium Essential Connections</div>
+        <div class="products-grid" id="cable-grid"></div>
+    </div>
+
+    <div class="modal-overlay" id="authModalOverlay">
+        <div class="auth-modal">
+            <div class="close-modal" onclick="closeAuthModal()">&times;</div>
+            <div class="logo">OK<span>OL</span></div>
+            
+            <div id="loginFormSection">
+                <h3 style="margin-bottom: 20px; font-weight: 800; letter-spacing: 1px;">SIGN IN</h3>
+                <form class="auth-form" onsubmit="handleAuth(event, 'login')">
+                    <input type="email" id="loginEmail" placeholder="Enter Your Email" required>
+                    <input type="password" id="loginPassword" placeholder="Enter Password" required>
+                    <button type="submit" class="auth-submit-btn">Access Account</button>
+                </form>
+                <div class="auth-switch">New to OKOL? <span onclick="switchForm('signup')">Create Account</span></div>
+            </div>
+
+            <div id="signupFormSection" style="display: none;">
+                <h3 style="margin-bottom: 20px; font-weight: 800; letter-spacing: 1px;">CREATE ACCOUNT</h3>
+                <form class="auth-form" onsubmit="handleAuth(event, 'signup')">
+                    <input type="text" id="signupName" placeholder="Full Name" required>
+                    <input type="email" id="signupEmail" placeholder="Email Address" required>
+                    <input type="password" id="signupPassword" placeholder="Password (Min. 6 characters)" required>
+                    <button type="submit" class="auth-submit-btn">Register Now</button>
+                </form>
+                <div class="auth-switch">Already have an account? <span onclick="switchForm('login')">Sign In</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <div class="close-cart" onclick="toggleCart()">&times;</div>
+        </div>
+        <div class="cart-items-list" id="cartItemsList"></div>
+        <div style="margin-bottom: 25px; font-size: 22px; display: flex; justify-content: space-between;">
+            <span>Subtotal:</span>
+            <strong style="color:var(--primary)">Rs. <span id="cart-total">0</span></strong>
+        </div>
+        <a href="#" class="btn-checkout" onclick="checkoutWhatsApp()">Confirm via WhatsApp</a>
+    </div>
+
+    <div class="bottom-ad" id="popupAd">
+        <img id="adImg" src="https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=100&q=80" alt="Verified Buy">
+        <div>
+            <h4 style="color: var(--primary); font-size: 12px; letter-spacing: 1px;">🔥 RECENT ORDER</h4>
+            <p id="adTitle" style="font-size: 14px; margin-top: 3px; font-weight: 500; color: #1e293b;"></p>
+        </div>
+    </div>
+
+    <script>
+        // Preloader Sequence Management logic
+        window.addEventListener('DOMContentLoaded', () => {
+            const loaderLogo = document.getElementById('loaderLogo');
+            const loaderTagline = document.getElementById('loaderTagline');
+            const preloader = document.getElementById('preloader');
+
+            // Phase 1: After 2 seconds, transition to the brand tagline statement
+            setTimeout(() => {
+                loaderLogo.style.opacity = '0';
+                loaderLogo.style.transform = 'scale(0.8)';
+                
+                setTimeout(() => {
+                    loaderLogo.style.display = 'none';
+                    loaderTagline.style.opacity = '1';
+                    loaderTagline.style.transform = 'translateY(0)';
+                }, 400);
+            }, 2000);
+
+            // Phase 2: After another 2 seconds (4.4 seconds total), fade out preloader completely
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                }, 800);
+            }, 4400);
+        });
+
+        // Hero Background Carousel Setup
+        const heroImages = [
+            "https://images.unsplash.com/photo-1546435770-a3e426bf472b?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=1200&q=80",
+            "https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=1200&q=80"
+        ];
+        let currentImgIndex = 0;
+        const heroSection = document.getElementById('hero-slider');
+        
+        function changeHeroBg() {
+            heroSection.style.backgroundImage = `url('${heroImages[currentImgIndex]}')`;
+            currentImgIndex = (currentImgIndex + 1) % heroImages.length;
+        }
+        setInterval(changeHeroBg, 4000);
+
+        // Core Catalog Data Structure
+        const products = [
+            { id: 1, cat: 'audio', title: 'Okol CyberPods Neo X', price: 2499, img: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80' },
+            { id: 2, cat: 'audio', title: 'Okol Studio ANC Over-Ear', price: 4199, img: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=500&q=80' },
+            { id: 3, cat: 'audio', title: 'Okol AirBuds Pro Flagship', price: 5499, img: 'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=500&q=80' },
+            { id: 4, cat: 'audio', title: 'Okol HeavyBass Flex Neckband', price: 1850, img: 'https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=500&q=80' },
+            { id: 5, cat: 'audio', title: 'Okol Carbon Over-Ear Pro', price: 7999, img: 'https://images.unsplash.com/photo-1585155770447-2f66e2a397b5?auto=format&fit=crop&w=500&q=80' },
+            { id: 6, cat: 'audio', title: 'Okol SportPulse Active Buds', price: 3299, img: 'https://images.unsplash.com/photo-1577174881658-0f30ed549adc?auto=format&fit=crop&w=500&q=80' },
+            { id: 8, cat: 'audio', title: 'Okol Crystal Clarity Pods', price: 2999, img: 'https://images.unsplash.com/photo-1600294037681-c80b4cb5b434?auto=format&fit=crop&w=500&q=80' },
+            { id: 9, cat: 'audio', title: 'Okol Solo Wireless Pro', price: 6500, img: 'https://images.unsplash.com/photo-1524678606370-a47ad25cb82a?auto=format&fit=crop&w=500&q=80' },
+            { id: 10, cat: 'audio', title: 'Okol Wave Pods Pocket Edition', price: 1999, img: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=500&q=80' },
+            { id: 13, cat: 'power', title: 'Okol SlimPack 5K Pocket Size', price: 1499, img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=500&q=80' },
+            { id: 15, cat: 'power', title: 'Okol AirCharge Wireless Dock', price: 2799, img: 'https://images.unsplash.com/photo-1585338107529-13afc5f02586?auto=format&fit=crop&w=500&q=80' },
+            { id: 18, cat: 'power', title: 'Okol Multi-Port Desk Hub', price: 4499, img: 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?auto=format&fit=crop&w=500&q=80' },
+            { id: 21, cat: 'cable', title: 'Okol SoundEngine Wired Metallic', price: 799, img: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?auto=format&fit=crop&w=500&q=80' },
+            { id: 25, cat: 'cable', title: 'Okol PureStudio Pro Earphones', price: 899, img: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?auto=format&fit=crop&w=500&q=80' },
+            { id: 28, cat: 'cable', title: 'Okol Type-C Hi-Res Handsfree', price: 1199, img: 'https://images.unsplash.com/photo-1613040809024-b4ef7ba99bc3?auto=format&fit=crop&w=500&q=80' }
+        ];
+
+        // Catalog Content Construction
+        products.forEach(p => {
+            const cardHtml = `
+                <div class="card">
+                    <div class="card-mini-ad">🔥 LIMITED STOCK — HAMZA BHAI'S APPROVED SELECTION</div>
+                    <div class="img-container">
+                        <img class="card-img" src="${p.img}" alt="${p.title}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1608248597481-496100c8c836?auto=format&fit=crop&w=500&q=80';">
+                    </div>
+                    <div class="card-info">
+                        <h3 class="card-title">${p.title}</h3>
+                        <div class="card-price">Rs. ${p.price.toLocaleString()}</div>
+                        <button class="btn-add-cart" onclick="addToCart('${p.title}', ${p.price})">Add To Cart</button>
+                    </div>
+                </div>
+            `;
+            document.getElementById(`${p.cat}-grid`).innerHTML += cardHtml;
+        });
+
+        // Authentication State Variables
+        let isLoggedIn = false;
+        let registeredUser = {
+            email: "admin@okol.com",
+            password: "password123"
+        };
+
+        // Modal Controls
+        function openAuthModal(mode = 'login') {
+            document.getElementById('authModalOverlay').classList.add('active');
+            switchForm(mode);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModalOverlay').classList.remove('active');
+        }
+
+        function switchForm(mode) {
+            if (mode === 'login') {
+                document.getElementById('loginFormSection').style.display = 'block';
+                document.getElementById('signupFormSection').style.display = 'none';
+            } else {
+                document.getElementById('loginFormSection').style.display = 'none';
+                document.getElementById('signupFormSection').style.display = 'block';
+            }
+        }
+
+        // Logic Verification Handler
+        function handleAuth(event, type) {
+            event.preventDefault();
+            
+            if (type === 'signup') {
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+
+                if (password.length < 6) {
+                    alert("Security Failure: Password must be at least 6 characters long.");
+                    return;
+                }
+
+                registeredUser.email = email;
+                registeredUser.password = password;
+                alert("Account Created successfully! Log in now.");
+                switchForm('login');
+            } 
+            
+            if (type === 'login') {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                if (email === registeredUser.email && password === registeredUser.password) {
+                    isLoggedIn = true;
+                    document.getElementById('navAuthBtn').innerText = "Logged In";
+                    document.getElementById('navAuthBtn').style.borderColor = "var(--accent)";
+                    document.getElementById('navAuthBtn').disabled = true;
+                    closeAuthModal();
+                    alert("Welcome back to OKOL Elite Hub!");
+                } else {
+                    alert("Access Denied: Incorrect email or password format entered.");
+                }
+            }
+        }
+
+        // Cart State & Operations
+        let cart = [];
+        function toggleCart() {
+            if (!isLoggedIn) {
+                openAuthModal('login');
+                return;
+            }
+            document.getElementById('cartSidebar').classList.toggle('active');
+        }
+
+        function addToCart(title, price) {
+            if (!isLoggedIn) {
+                openAuthModal('login');
+                return;
+            }
+            cart.push({ title, price });
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+            const list = document.getElementById('cartItemsList');
+            list.innerHTML = "";
+            let total = 0;
+            
+            cart.forEach((item) => {
+                total += item.price;
+                list.innerHTML += `
+                    <div class="cart-item">
+                        <span>${item.title}</span>
+                        <strong style="color:var(--primary)">Rs. ${item.price}</strong>
+                    </div>
+                `;
+            });
+            document.getElementById('cart-total').innerText = total.toLocaleString();
+        }
+
+        // WhatsApp Checkout Engine integration
+        function checkoutWhatsApp() {
+            if(cart.length === 0) {
+                alert("Please add items to your cart first!");
+                return;
+            }
+            let message = "Salam OKOL Pakistan, I would like to place an order for:\n\n";
+            let total = 0;
+            cart.forEach((item, i) => {
+                message += `▪️ ${i+1}. ${item.title} (Rs. ${item.price})\n`;
+                total += item.price;
+            });
+            message += `\n🎯 Subtotal Amount: Rs. ${total}\nPlease share delivery details.`;
+            window.open(`https://wa.me/923194651656?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        // Floating Micro Toast Controller
+        const popupAd = document.getElementById('popupAd');
+        const adTitle = document.getElementById('adTitle');
+
+        function triggerPopupAd() {
+            const randomProduct = products[Math.floor(Math.random() * products.length)];
+            adTitle.innerText = `Someone from Pakistan just bought ${randomProduct.title}!`;
+            popupAd.classList.add('show');
+            setTimeout(() => {
+                popupAd.classList.remove('show');
+            }, 4000);
+        }
+        setInterval(triggerPopupAd, 11000);
+    </script>
+</body>
+</html>
